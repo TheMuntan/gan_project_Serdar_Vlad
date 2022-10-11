@@ -55,28 +55,28 @@ class Discriminator(nn.Module):
         self.main = nn.Sequential(
             OrderedDict([
                 # Block 1: input is (3) x 64 x 64
-                ('Conv2d_1', None),
-                ('LeakyReLU_1', None),
+                ('Conv2d_1', nn.ConvTranspose2d(3,64)),
+                ('LeakyReLU_1', nn.LeakyReLU()),
 
                 # Block 2: input is (64) x 32 x 32
-                ('Conv2d_2', None),
-                ('BatchNorm2d_2', None),
-                ('LeakyReLU_2', None),
+                ('Conv2d_2', nn.ConvTranspose2d(64,128)),
+                ('BatchNorm2d_2', nn.BatchNorm2d()),
+                ('LeakyReLU_2', nn.LeakyReLU()),
 
                 # Block 3: input is (64*2) x 16 x 16
-                ('Conv2d_3', None),
-                ('BatchNorm2d_3', None),
-                ('LeakyReLU_3', None),
+                ('Conv2d_3', nn.ConvTranspose2d(128,256)),
+                ('BatchNorm2d_3', nn.BatchNorm2d()),
+                ('LeakyReLU_3', nn.LeakyReLU()),
 
                 # Block 4: input is (64*4) x 8 x 8
-                ('Conv2d_4', None),
-                ('BatchNorm2d_4', None),
-                ('LeakyReLU_4', None),
+                ('Conv2d_4', nn.ConvTranspose2d(256,512)),
+                ('BatchNorm2d_4', nn.BatchNorm2d()),
+                ('LeakyReLU_4', nn.LeakyReLU()),
 
                 # Block 5: input is (64*8) x 4 x 4
-                ('Conv2d_5', None),
-                ('Sigmoid', None),
-                ('Flatten', None)
+                ('Conv2d_5', nn.ConvTranspose2d(512,)),
+                ('Sigmoid', nn.Sigmoid()),
+                ('Flatten', nn.Flatten())
                 # Output: 1
             ])
         )
