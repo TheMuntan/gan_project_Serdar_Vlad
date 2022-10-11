@@ -3,7 +3,6 @@ test_saves/
 images
 experiments
 datasets
-Anime_faces/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
