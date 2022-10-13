@@ -13,7 +13,7 @@ class Generator(nn.Module):
             OrderedDict([
                 # Block 1:input is Z, going into a convolution
                 ('ConvTranspose2d_1',
-                 nn.ConvTranspose2d(Z,512,4,1,0)),
+                 nn.ConvTranspose2d(config["latent_dim"],512,4,1,0)),
                 ('BatchNorm2d_1', nn.BatchNorm2d()),
                 ('ReLU_1', nn.ReLU()),
 
