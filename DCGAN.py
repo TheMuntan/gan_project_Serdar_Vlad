@@ -31,8 +31,11 @@ denormalize = Denormalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
 # TODO: define the generator and discriminator
 # TIP 1: don't forget to apply the weights_init function from utils.py.
 # TIP 2: don't forget to put the models on the correct device.
-generator = None
-discriminator = None
+
+generator = Generator(config)
+weights_init(generator)
+discriminator = Discriminator()
+weights_init(discriminator)
 
 # Weights and biases
 if config["wandb"]:
@@ -49,11 +52,11 @@ if config["wandb"]:
         model = InceptionV3([block_idx]).to(device)
 
 # TODO: define loss function
-adversarial_loss = None
+adversarial_loss = nn.BCELoss()
 
 # TODO: define optimizers
-G_optimizer = None
-D_optimizer = None
+G_optimizer = torch.optim.Adam(generator.parameters(), lr=config["learning_rate"])
+D_optimizer = torch.optim.Adam(discriminator.parameters(), lr=config["learning_rate"])
 
 # define all ones and all zeros tensors
 real_target = Variable(torch.ones(config["batch_size"], 1).to(device))
@@ -81,9 +84,9 @@ for epoch in range(1, config["num_epochs"] + 1):
         real_images = real_images.to(device)
 
         # TODO: forward through discriminator
-        output = None
+        output = discriminator(real_images)
         # TODO: calculate loss (use the function from utils.py)
-        D_real_loss = None
+        D_real_loss = discriminator_loss(adversarial_loss,output)
         # TODO: backpropagate the loss
 
         ## Discriminator fake ##
