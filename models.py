@@ -74,7 +74,7 @@ class Discriminator(nn.Module):
                 ('LeakyReLU_4', nn.LeakyReLU()),
 
                 # Block 5: input is (64*8) x 4 x 4
-                ('Conv2d_5', nn.ConvTranspose2d(512,1,4,2,1)),
+                ('Conv2d_5', nn.ConvTranspose2d(512,1,4,1,0)),
                 ('Sigmoid', nn.Sigmoid()),
                 ('Flatten', nn.Flatten())
                 # Output: 1
