@@ -91,18 +91,18 @@ for epoch in range(1, config["num_epochs"] + 1):
         D_real_loss.backward()
         ## Discriminator fake ##
         # TODO: create a noise vector of the correct dimensions
-        noise_vector = None
+        noise_vector = torch.randn(config["batch_size"],config["latent_dim"], 1, 1, device=device)
         # TODO: forward the noise vector through the generator
-        generated_image = None
+        generated_image = generator(noise_vector)
 
         # TODO: forward through the discriminator
-        output = None
+        output = discriminator(generated_image)
         # TODO: calculate loss (use the function from utils.py)
-        D_fake_loss = None
+        D_fake_loss = discriminator_loss(adversarial_loss, output, 0)
         # TODO: backpropagate the loss
-
+        D_fake_loss.backward()
         # TODO: take a step with the optimizer
-
+        D_optimizer.step()
         # Discriminator tot loss
         D_total_loss = D_real_loss + D_fake_loss
         D_loss_list.append(D_total_loss)
