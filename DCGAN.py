@@ -55,8 +55,8 @@ if config["wandb"]:
 adversarial_loss = nn.BCELoss()
 
 # TODO: define optimizers
-G_optimizer = torch.optim.Adam(generator.parameters(), lr=config["learning_rate"])
-D_optimizer = torch.optim.Adam(discriminator.parameters(), lr=config["learning_rate"])
+G_optimizer = torch.optim.Adam(generator.parameters(), lr=config["learning_rate"], betas=(0.5,0.999))
+D_optimizer = torch.optim.Adam(discriminator.parameters(), lr=config["learning_rate"], betas=(0.5,0.999))
 
 # define all ones and all zeros tensors
 real_target = Variable(torch.ones(config["batch_size"], 1).to(device))
@@ -86,9 +86,9 @@ for epoch in range(1, config["num_epochs"] + 1):
         # TODO: forward through discriminator
         output = discriminator(real_images)
         # TODO: calculate loss (use the function from utils.py)
-        D_real_loss = discriminator_loss(adversarial_loss,output)
+        D_real_loss = discriminator_loss(adversarial_loss,output,True)
         # TODO: backpropagate the loss
-
+        D_real_loss.backward()
         ## Discriminator fake ##
         # TODO: create a noise vector of the correct dimensions
         noise_vector = None
