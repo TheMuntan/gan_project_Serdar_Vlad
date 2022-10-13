@@ -86,19 +86,19 @@ for epoch in range(1, config["num_epochs"] + 1):
         # TODO: forward through discriminator
         output = discriminator(real_images)
         # TODO: calculate loss (use the function from utils.py)
-        D_real_loss = discriminator_loss(adversarial_loss,output,True)
+        D_real_loss = discriminator_loss(adversarial_loss,output,real_target)
         # TODO: backpropagate the loss
         D_real_loss.backward()
         ## Discriminator fake ##
         # TODO: create a noise vector of the correct dimensions
-        noise_vector = torch.randn(config["batch_size"],config["latent_dim"], 1, 1, device=device)
+        noise_vector = torch.randn(config["batch_size"],config["latent_dim"], 1, 1, device=device) #RandN because we want a normal distribution of the features
         # TODO: forward the noise vector through the generator
         generated_image = generator(noise_vector)
 
         # TODO: forward through the discriminator
-        output = discriminator(generated_image)
+        output = discriminator(generated_image.detach()) #detach before entering discriminator, to get rid of gradients from the generator.
         # TODO: calculate loss (use the function from utils.py)
-        D_fake_loss = discriminator_loss(adversarial_loss, output, 0)
+        D_fake_loss = discriminator_loss(adversarial_loss, output, fake_target)
         # TODO: backpropagate the loss
         D_fake_loss.backward()
         # TODO: take a step with the optimizer
@@ -110,14 +110,15 @@ for epoch in range(1, config["num_epochs"] + 1):
         ## Train G on D's output ##
         G_optimizer.zero_grad()
         # TODO: forward generated image through the discriminator
-        gen_output = None
+        gen_output = discriminator(generated_image)
         # TODO: calculate loss (use the function from utils.py)
-        G_loss = None
+        G_loss = generator_loss(adversarial_loss, gen_output, real_target)
         G_loss_list.append(G_loss)
 
         # TODO: backpropagate the loss
-
+        G_loss.backward()
         # TODO: take a step with the optimizer
+        G_optimizer.step()
 
     discr_loss_mean = torch.mean(torch.FloatTensor(D_loss_list)).item()
     gen_loss_mean = torch.mean(torch.FloatTensor(G_loss_list)).item()
