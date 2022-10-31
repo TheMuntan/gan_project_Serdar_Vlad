@@ -33,8 +33,10 @@ denormalize = Denormalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
 # TIP 2: don't forget to put the models on the correct device.
 
 generator = Generator(config)
+generator = generator.to(device)
 weights_init(generator)
 discriminator = Discriminator()
+discriminator = discriminator.to(device)
 weights_init(discriminator)
 
 # Weights and biases
