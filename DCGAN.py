@@ -15,6 +15,7 @@ config["device"] = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 device = config["device"]
 learning_rate = config["learning_rate"]
 print(config)
+print(config["device"])
 
 # manual seeds
 torch.manual_seed(config["random_seed"])
