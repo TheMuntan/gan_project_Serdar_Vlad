@@ -42,6 +42,7 @@ weights_init(discriminator)
 
 # Weights and biases
 if config["wandb"]:
+    wandb.login(key="4d2003171a9585b87c23c1f0cc9bf3c0fc20c3c0")
     wandb.init(project="GAN_project_Serdar_Vlad", entity="vladart", name=config["name"] + "_train")
     wandb.config = {
         "learning_rate": config['learning_rate'],
@@ -88,6 +89,9 @@ for epoch in range(1, config["num_epochs"] + 1):
 
         # TODO: forward through discriminator
         output = discriminator(real_images)
+        # print(output.size())
+        # print(real_images.size())
+        # print(real_target.size())
         # TODO: calculate loss (use the function from utils.py)
         D_real_loss = discriminator_loss(adversarial_loss,output,real_target)
         # TODO: backpropagate the loss
