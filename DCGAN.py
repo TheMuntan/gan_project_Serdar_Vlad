@@ -88,31 +88,33 @@ for epoch in range(1, config["num_epochs"] + 1):
         real_images = real_images.to(device)
 
         # TODO: forward through discriminator
-        output = discriminator(real_images)
-        # print(output.size())
-        # print(real_images.size())
-        # print(real_target.size())
-        # TODO: calculate loss (use the function from utils.py)
-        D_real_loss = discriminator_loss(adversarial_loss,output,real_target)
-        # TODO: backpropagate the loss
-        D_real_loss.backward()
-        ## Discriminator fake ##
-        # TODO: create a noise vector of the correct dimensions
-        noise_vector = torch.randn(config["batch_size"],config["latent_dim"], 1, 1, device=device) #RandN because we want a normal distribution of the features
-        # TODO: forward the noise vector through the generator
-        generated_image = generator(noise_vector)
+        for inter in range(1): #change the value 1 if training discriminator to optimum first before training generator
 
-        # TODO: forward through the discriminator
-        output = discriminator(generated_image.detach()) #detach before entering discriminator, to get rid of gradients from the generator.
-        # TODO: calculate loss (use the function from utils.py)
-        D_fake_loss = discriminator_loss(adversarial_loss, output, fake_target)
-        # TODO: backpropagate the loss
-        D_fake_loss.backward()
-        # TODO: take a step with the optimizer
-        D_optimizer.step()
-        # Discriminator tot loss
-        D_total_loss = D_real_loss + D_fake_loss
-        D_loss_list.append(D_total_loss)
+            output = discriminator(real_images)
+            # print(output.size())
+            # print(real_images.size())
+            # print(real_target.size())
+            # TODO: calculate loss (use the function from utils.py)
+            D_real_loss = discriminator_loss(adversarial_loss,output,real_target)
+            # TODO: backpropagate the loss
+            D_real_loss.backward()
+            ## Discriminator fake ##
+            # TODO: create a noise vector of the correct dimensions
+            noise_vector = torch.randn(config["batch_size"],config["latent_dim"], 1, 1, device=device) #RandN because we want a normal distribution of the features
+            # TODO: forward the noise vector through the generator
+            generated_image = generator(noise_vector)
+
+            # TODO: forward through the discriminator
+            output = discriminator(generated_image.detach()) #detach before entering discriminator, to get rid of gradients from the generator.
+            # TODO: calculate loss (use the function from utils.py)
+            D_fake_loss = discriminator_loss(adversarial_loss, output, fake_target)
+            # TODO: backpropagate the loss
+            D_fake_loss.backward()
+            # TODO: take a step with the optimizer
+            D_optimizer.step()
+            # Discriminator tot loss
+            D_total_loss = D_real_loss + D_fake_loss
+            D_loss_list.append(D_total_loss)
 
         ## Train G on D's output ##
         G_optimizer.zero_grad()
